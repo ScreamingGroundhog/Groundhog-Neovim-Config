@@ -27,9 +27,9 @@ return {
 		local wanted = {}
 		local glob = vim.fn.glob(vim.fn.stdpath("config") .. "/lua/lsp/*.lua", false, true)
 		for _, filepath in ipairs(glob) do
-			local server_name = vim.fn.fnamemodify(filepath, ":t:r")
-			if server_name and server_name ~= "" then
-				wanted[server_name] = filepath
+			local pkg_name = vim.fn.fnamemodify(filepath, ":t:r")
+			if pkg_name and pkg_name ~= "" then
+				wanted[pkg_name] = filepath
 			end
 		end
 
@@ -37,8 +37,7 @@ return {
 		registry.refresh(function()
 			local packages = registry.get_installed_package_names()
 			for _, pkg_name in ipairs(packages) do
-				local server_name = mappings.package_to_lspconfig[pkg_name]
-				if server_name and not wanted[server_name] then
+				if pkg_name and not wanted[pkg_name] then
 					local pkg = registry.get_package(pkg_name)
 					if pkg:is_installed() then
 						pkg:uninstall()
@@ -54,8 +53,7 @@ return {
 		local capabilities = ok and blink_cap or {}
 
 		-- 安装并配置所有声明的 LSP server
-		for server_name, _ in pairs(wanted) do
-			local pkg_name = mappings.lspconfig_to_package[server_name]
+		for pkg_name, _ in pairs(wanted) do
 			if pkg_name then
 				local ok_pkg, _ = pcall(registry.get_package, pkg_name)
 				if ok_pkg then
@@ -66,12 +64,13 @@ return {
 				end
 			end
 			-- 读取 lua/lsp/<name>.lua 配置，合并 capabilities 后启用
-			local lsp_config = require("lsp." .. server_name)
+			local lsp_config = require("lsp." .. pkg_name)
 			lsp_config.capabilities = vim.tbl_deep_extend(
 				"force",
 				lsp_config.capabilities or {},
 				capabilities
 			)
+            local server_name = mappings.package_to_lspconfig[pkg_name]
 			vim.lsp.config(server_name, lsp_config)
 			vim.lsp.enable(server_name, true)
 		end
