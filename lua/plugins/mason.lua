@@ -70,7 +70,7 @@ return {
 				lsp_config.capabilities or {},
 				capabilities
 			)
-            local server_name = mappings.package_to_lspconfig[pkg_name]
+            local server_name = mappings.package_to_lspconfig[pkg_name] or pkg_name
 			vim.lsp.config(server_name, lsp_config)
 			vim.lsp.enable(server_name, true)
 		end
