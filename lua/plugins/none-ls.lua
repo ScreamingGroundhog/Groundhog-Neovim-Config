@@ -63,7 +63,7 @@ return {
 				-- 2) 将 builtin 注册到 none-ls 的 source 列表中
 				--    如果提供了 override 非空表，用 .with() 方法覆盖默认配置
 				--    .with() 是 none-ls builtin 的内置方法，返回一个带有自定义参数的新 source
-				if spec.override and type(spec.override) == "table" and vim.tbl_count(spec.override) > 0 then
+				if spec.override and type(spec.override) == "table" and next(spec.override) ~= nil then
 					table.insert(sources, spec.builtin.with(spec.override))
 				else
 					-- 没有自定义参数，直接使用 builtin 的默认配置

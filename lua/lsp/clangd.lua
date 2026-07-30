@@ -1,4 +1,5 @@
 return {
+	filetypes = { "c", "cpp", "cuda", "objc", "objcpp" },
 	cmd = {
 		"clangd",
 		"--background-index", -- 后台自动建立索引

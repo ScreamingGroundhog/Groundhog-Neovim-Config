@@ -72,7 +72,7 @@ return {
 			)
             local server_name = mappings.package_to_lspconfig[pkg_name] or pkg_name
 			vim.lsp.config(server_name, lsp_config)
-			vim.lsp.enable(server_name, true)
+			vim.lsp.enable(server_name, lsp_config.filetypes or true)
 		end
 
 		-- LSP 快捷键（仅当前 buffer 生效）
