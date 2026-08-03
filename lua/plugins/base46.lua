@@ -7,6 +7,6 @@ return {
     },
     config = function(_, opts)
         require("base46").setup(opts)
-        vim.cmd.colorscheme("dms")
+        vim.cmd.colorscheme("integration")
     end
 }
